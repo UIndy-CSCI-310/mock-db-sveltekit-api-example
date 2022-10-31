@@ -1,46 +1,47 @@
-import { SimpleDB } from './simpledb';
-import type { expensesTracking } from './expensesT';
+import { SimpleDB } from './simpledb'
+import type { CartItem } from './CartItem'
 
-const mockFName = 'mockdata.json'; // just for testing!
+const mockFName = 'mockdata.json' // just for testing!
 
 class MockClient<T> {
 	// mock client for testing...
-	private db;
-	private loaded = false;
+	private db
+	private loaded = false
 	constructor() {
-		this.db = new SimpleDB<T>();
+		this.db = new SimpleDB<T>()
 	}
 
 	get(key: string): T | null {
 		if (!this.loaded) {
-			this.load();
-			this.loaded = true;
+			this.load()
+			this.loaded = true
 		}
-		return this.db.getItem(key);
+		return this.db.getItem(key)
 	}
 
 	set(key: string, value: T) {
-		this.db.setItem(key, value);
-		this.store();
+		const newKey = this.db.setItem(key, value) // potentially sets a new key if key is empty
+		this.store()
+		return newKey
 	}
 
 	keys(): string[] {
 		if (!this.loaded) {
-			this.load();
-			this.loaded = true;
+			this.load()
+			this.loaded = true
 		}
-		return this.db.keys();
+		return this.db.keys()
 	}
 
 	load() {
-		this.db.load(mockFName);
+		this.db.load(mockFName)
 	}
 
 	store() {
-		this.db.store(mockFName);
+		this.db.store(mockFName)
 	}
 }
 
-const myDB = new MockClient<expensesTracking>(); // you can change this to hold whatever
+const myDB = new MockClient<CartItem>() // you can change this to hold whatever
 
-export const client = myDB;
+export const client = myDB

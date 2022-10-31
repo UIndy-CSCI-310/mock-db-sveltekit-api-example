@@ -1,41 +1,47 @@
 <script lang="ts">
-	import type { expensesTracking } from '../lib/expensesT';
-	import ExpensesTRow from '../components/expensesTRow.svelte';
-	import ExpensesTotal from '../../src/components/expensesTotal.svelte';
-	import { expenses } from '../lib/expenseStore';
-	import CartEnterForm from '../components/expensesEnterForm.svelte';
-	import { onMount } from 'svelte';
+	import type { CartItem } from '$lib/CartItem'
+	import CartItemRow from '$lib/components/CartItemRow.svelte'
+	import CartTotal from '$lib/components/CartTotal.svelte'
+	import CartEnterForm from '$lib/components/CartItemEnterForm.svelte'
+	import { cart } from '$lib/cartStore'
+	import { onMount } from 'svelte'
+	import { doGetAll, doPostItem } from '$lib/apiHelpers'
+	import { prevent_default } from 'svelte/internal'
+
+	let currOID = 0
 
 	onMount(async () => {
-		const response = await fetch('/api/');
-		const data = await response.json();
-		expenses.set(data);
-	});
+		const [currOID, data] = await doGetAll()
+		cart.set(data)
+	})
 
 	const onDelete = (ix: number) => {
-		expenses.set($expenses.filter((_, i) => ix != i));
-	};
+		cart.set($cart.filter((_, i) => ix != i))
+	}
 
-	const onSubmit = (e: CustomEvent<expensesTracking>) => {
-		const newItem = e.detail;
-		const newList = [...$expenses, newItem] as expensesTracking[];
-		expenses.set(newList);
-	};
+	const onSubmit = (e: CustomEvent<CartItem>) => {
+		const newItem = e.detail
+		const newList = [...$cart, newItem] as CartItem[]
+		cart.set(newList)
+		doPostItem(newItem).then((result) => {
+			console.log('In svelte with', JSON.stringify(newItem))
+		})
+	}
 </script>
 
-<CartEnterForm on:submit={(e) => onSubmit(e)} />
+<CartEnterForm oid={currOID} on:submit={(e) => onSubmit(e)} />
 
 <div class="expensesTrackingDisplay">
-	{#each $expenses as expense, i}
-		<ExpensesTRow {...expense} on:delete={() => onDelete(i)} />
+	{#each $cart as item, i}
+		<CartItemRow {...item} on:delete={() => onDelete(i)} />
 	{/each}
 </div>
 
-<ExpensesTotal />
+<CartTotal />
 
 <style>
 	.expensesTrackingDisplay {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
 	}
 </style>
