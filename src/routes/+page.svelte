@@ -1,38 +1,41 @@
-<h1>HW 7: SvelteKit</h1>
-
 <script lang="ts">
-	import {onMount} from "svelte"
+	import type { expensesTracking } from '../lib/expensesT';
+	import ExpensesTRow from '../components/expensesTRow.svelte';
+	import ExpensesTotal from '../../src/components/expensesTotal.svelte';
+	import { expenses } from '../lib/expenseStore';
+	import CartEnterForm from '../components/expensesEnterForm.svelte';
+	import { onMount } from 'svelte';
 
-	let dataList:[string, string][] = []
+	onMount(async () => {
+		const response = await fetch('/api/');
+		const data = await response.json();
+		expenses.set(data);
+	});
 
-	onMount(() => {
-		fetch("/api")
-		.then(result => result.json())
-		.then(data => {
-			dataList = data
-		})
-	})
+	const onDelete = (ix: number) => {
+		expenses.set($expenses.filter((_, i) => ix != i));
+	};
+
+	const onSubmit = (e: CustomEvent<expensesTracking>) => {
+		const newItem = e.detail;
+		const newList = [...$expenses, newItem] as expensesTracking[];
+		expenses.set(newList);
+	};
 </script>
 
-<section>
-	<div class="prose">
-		<p>
-			This week we'll implement a simple <a href="https://www.geeksforgeeks.org/rest-api-introduction/">REST API</a> with a mock database using SvelteKit.
-	</div>
+<CartEnterForm on:submit={(e) => onSubmit(e)} />
 
-	<ul>
-		{#each dataList as item,i}
-		<li>{item[0]}:{item[1]}</li>
-		{/each}
-	</ul>
-</section>
+<div class="expensesTrackingDisplay">
+	{#each $expenses as expense, i}
+		<ExpensesTRow {...expense} on:delete={() => onDelete(i)} />
+	{/each}
+</div>
+
+<ExpensesTotal />
 
 <style>
-	.prose {
-		margin: 1rem;
-	}
-
-	ul {
-		list-style: none;
+	.expensesTrackingDisplay {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	}
 </style>

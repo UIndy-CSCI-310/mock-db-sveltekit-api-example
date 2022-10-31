@@ -1,45 +1,46 @@
-import {SimpleDB} from './simpledb'
+import { SimpleDB } from './simpledb';
+import type { expensesTracking } from './expensesT';
 
-const mockFName = "mockdata.json" // just for testing!
+const mockFName = 'mockdata.json'; // just for testing!
 
-class MockClient<T> { // mock client for testing...
-    private db
-    private loaded = false
-    constructor() {
-        this.db = new SimpleDB<T>()
-    }
+class MockClient<T> {
+	// mock client for testing...
+	private db;
+	private loaded = false;
+	constructor() {
+		this.db = new SimpleDB<T>();
+	}
 
-    get( key:string): T | null {
-        if (!this.loaded) {
-            this.load()
-            this.loaded = true
-        }
-        return this.db.getItem(key)
-    }
+	get(key: string): T | null {
+		if (!this.loaded) {
+			this.load();
+			this.loaded = true;
+		}
+		return this.db.getItem(key);
+	}
 
-    set( key:string, value: T) {
-        this.db.setItem(key, value)
-        this.store()
-    }
+	set(key: string, value: T) {
+		this.db.setItem(key, value);
+		this.store();
+	}
 
-    keys() : string[] {
-        if (!this.loaded) {
-            this.load()
-            this.loaded = true
-        }
-        return this.db.keys()
-    }
+	keys(): string[] {
+		if (!this.loaded) {
+			this.load();
+			this.loaded = true;
+		}
+		return this.db.keys();
+	}
 
-    load() {
-        this.db.load(mockFName)
-    }
+	load() {
+		this.db.load(mockFName);
+	}
 
-    store() {
-        this.db.store(mockFName)
-    }
+	store() {
+		this.db.store(mockFName);
+	}
 }
 
-const myDB = new MockClient<string>() // you can change this to hold whatever
+const myDB = new MockClient<expensesTracking>(); // you can change this to hold whatever
 
-export const client = myDB
-
+export const client = myDB;
