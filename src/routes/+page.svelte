@@ -1,22 +1,25 @@
 <script lang="ts">
 	import type { CartItem } from '$lib/CartItem'
+	import { EmptyCartItem } from '$lib/CartItem'
 	import CartItemRow from '$lib/components/CartItemRow.svelte'
 	import CartTotal from '$lib/components/CartTotal.svelte'
-	import CartEnterForm from '$lib/components/CartItemEnterForm.svelte'
+	import CartItemEnterForm from '$lib/components/CartItemEnterForm.svelte'
 	import { cart } from '$lib/cartStore'
 	import { onMount } from 'svelte'
-	import { doGetAll, doPostItem } from '$lib/apiHelpers'
-	import { prevent_default } from 'svelte/internal'
+	import { doGetAll, doPostItem, doDeleteItem } from '$lib/apiHelpers'
 
 	let currOID = 0
 
 	onMount(async () => {
-		const [currOID, data] = await doGetAll()
+		const [oid, data] = await doGetAll()
+		currOID = oid
 		cart.set(data)
 	})
 
 	const onDelete = (ix: number) => {
+		const oid = $cart[ix].oid
 		cart.set($cart.filter((_, i) => ix != i))
+		doDeleteItem(oid)
 	}
 
 	const onSubmit = (e: CustomEvent<CartItem>) => {
@@ -25,11 +28,12 @@
 		cart.set(newList)
 		doPostItem(newItem).then((result) => {
 			console.log('In svelte with', JSON.stringify(newItem))
+			currOID++
 		})
 	}
 </script>
 
-<CartEnterForm oid={currOID} on:submit={(e) => onSubmit(e)} />
+<CartItemEnterForm {...EmptyCartItem} oid={currOID} on:submit={(e) => onSubmit(e)} />
 
 <div class="expensesTrackingDisplay">
 	{#each $cart as item, i}

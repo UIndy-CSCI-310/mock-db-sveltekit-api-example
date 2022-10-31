@@ -2,11 +2,12 @@
 	import { createEventDispatcher } from 'svelte'
 	import type { CartItem } from '$lib/CartItem'
 	const dispatch = createEventDispatcher<{ submit: CartItem }>()
-	let oid: string
-	let name: string
-	let quantity: number
-	let price: number
-	let priceTxt: string = '0'
+	export let oid: number
+	export let name: string = ''
+	export let quantity: number = 0
+	export let price: number = 0
+	export let buttonText: string = 'Add Row'
+	let priceTxt: string = price.toString()
 	let nameField: HTMLInputElement
 	$: price = parseFloat(priceTxt)
 </script>
@@ -14,7 +15,7 @@
 <form
 	on:submit|preventDefault={() => {
 		dispatch('submit', { oid, name, quantity, price })
-		oid = ''
+		oid = oid + 1
 		name = ''
 		quantity = 0
 		price = 0
@@ -28,7 +29,11 @@
 	<input type="text" name="quantity" bind:value={quantity} /><br />
 	<label for="name">Price:</label>
 	<input type="text" name="price" bind:value={priceTxt} /> <br />
-	<input type="text" name="oid" readonly bind:value={oid} /><input type="submit" />
+	<label for="oid">OID</label>
+	<input type="text" name="oid" readonly bind:value={oid} /><input
+		value={buttonText}
+		type="submit"
+	/>
 	<br />
 	---------
 	<br />

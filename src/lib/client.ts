@@ -25,6 +25,10 @@ class MockClient<T> {
 		return newKey
 	}
 
+	del(key: string) {
+		this.db.removeItem(key)
+	}
+
 	keys(): string[] {
 		if (!this.loaded) {
 			this.load()

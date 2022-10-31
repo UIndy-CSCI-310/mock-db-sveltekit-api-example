@@ -21,7 +21,7 @@ export const POST: RequestHandler = async (reqEvent: RequestEvent) => {
 	let data: { [key: string]: CartItem } = {}
 	try {
 		data = await reqEvent.request.json()
-		Object.keys(data).forEach((k) => client.set(k, data[k]))
+		Object.keys(data).forEach((k) => client.set(`${k}`, data[k]))
 	} catch (err) {
 		if (err instanceof Error) {
 			throw error(404, err.message)

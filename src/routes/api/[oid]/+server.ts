@@ -16,24 +16,25 @@ export const GET: RequestHandler = async (reqEvent: RequestEvent) => {
 }
 
 export const PUT: RequestHandler = async (reqEvent: RequestEvent) => {
-	console.log('In PUT with specific OID:', reqEvent.url)
 	const key = reqEvent.url.pathname.split('/').slice(-1)[0]
 	let val: CartItem | null = null
 	try {
-		val = (await reqEvent.request.json()) as CartItem
+		val = await reqEvent.request.json()
 		// maybe do some sanity checking here?
-		client.set(key, val)
+		console.log('in PUT', val)
+		client.set(key, val as CartItem)
 	} catch (err) {
 		if (err instanceof Error) {
 			throw error(404, err.message)
 		}
 	}
 
-	return new Response('We got:' + JSON.stringify([key, val]))
+	return new Response(JSON.stringify([key, val]))
 }
 
 export const DELETE: RequestHandler = async (reqEvent: RequestEvent) => {
-	// fill in here
+	const key = reqEvent.url.pathname.split('/').slice(-1)[0]
+	client.del(key)
 
-	return new Response('')
+	return new Response(JSON.stringify({ message: `Deleted Key ${key}` }))
 }
