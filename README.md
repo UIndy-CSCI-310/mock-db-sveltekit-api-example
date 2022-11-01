@@ -1,4 +1,4 @@
-# Homework Project 8
+# Example REST API with SvelteKIT
 
 We'll be learning about REST APIs:
 
@@ -19,15 +19,6 @@ You can use a REST API chrome extenstion (e.g., boomerang, ARC, etc) or e.g., Po
 ```
 curl -d '{"baz":"bap"}' -H 'Content-Type: application/json' -X POST http://localhost:5173/api
 ```
-
-Points will be distributed as follows:
-
-- 20% Implement REST API: GET to retrieve a collection with your data type
-- 20% Implement REST API: POST to create new items with your data type
-- 20% Implement REST API: PUT to update an existing item
-- 20% Implment REST API: DELETE to remove an existing item
-- 10% Uses correct Typescript typing
-- 10% Uses consistent and clean style
 
 To run the web server:
 
