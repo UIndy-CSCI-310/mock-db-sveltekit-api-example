@@ -27,7 +27,6 @@
 		const newList = [...$cart, newItem] as CartItem[]
 		cart.set(newList)
 		doPostItem(newItem).then((result) => {
-			console.log('In svelte with', JSON.stringify(newItem))
 			currOID++
 		})
 	}

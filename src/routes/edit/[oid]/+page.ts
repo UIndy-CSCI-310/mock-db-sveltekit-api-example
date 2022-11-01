@@ -1,5 +1,4 @@
-/** @type {import('./$types').PageLoad} */
-export function load({ params }): { oid: string } {
+export function load({ params }: { params: { oid: string } }): { oid: string } {
 	return {
 		oid: params.oid
 	}

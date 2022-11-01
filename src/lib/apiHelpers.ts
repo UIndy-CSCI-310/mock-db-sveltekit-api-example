@@ -8,8 +8,7 @@ export const doGetAll = async (): Promise<[number, CartItem[]]> => {
 		oids.push(parseInt(pair[0]))
 		result.push(pair[1])
 	})
-	console.log('Got oids:', JSON.stringify(oids), Math.max(...oids))
-	return [Math.max(...oids) + 1, result]
+	return [Math.max(-1, ...oids) + 1, result]
 }
 
 export const doPostItem = async (item: CartItem) => {

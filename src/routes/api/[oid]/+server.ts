@@ -21,7 +21,6 @@ export const PUT: RequestHandler = async (reqEvent: RequestEvent) => {
 	try {
 		val = await reqEvent.request.json()
 		// maybe do some sanity checking here?
-		console.log('in PUT', val)
 		client.set(key, val as CartItem)
 	} catch (err) {
 		if (err instanceof Error) {

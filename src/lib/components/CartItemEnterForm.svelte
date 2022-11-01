@@ -26,7 +26,7 @@
 	<label for="name">Name:</label>
 	<input type="text" bind:this={nameField} name="name" bind:value={name} /><br />
 	<label for="name">Quantity:</label>
-	<input type="text" name="quantity" bind:value={quantity} /><br />
+	<input type="number" name="quantity" bind:value={quantity} /><br />
 	<label for="name">Price:</label>
 	<input type="text" name="price" bind:value={priceTxt} /> <br />
 	<label for="oid">OID</label>

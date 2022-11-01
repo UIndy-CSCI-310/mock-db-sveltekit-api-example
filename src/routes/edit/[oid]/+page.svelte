@@ -25,8 +25,7 @@
 			currCart[foundIndex] = newItem
 			cart.set(currCart)
 			doPutItem(newItem).then((result) => {
-				console.log('Back in svelte with', JSON.stringify(result))
-				goto('/')
+				goto('/') // back to home page
 			})
 		}
 	}

@@ -27,6 +27,7 @@ class MockClient<T> {
 
 	del(key: string) {
 		this.db.removeItem(key)
+		this.store()
 	}
 
 	keys(): string[] {
