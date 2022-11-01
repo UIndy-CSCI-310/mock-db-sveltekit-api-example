@@ -4,7 +4,6 @@
 	</ul>
 </div>
 <slot />
-<div>Footer</div>
 
 <style>
 	ul {

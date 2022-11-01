@@ -1,14 +1,19 @@
 import type { CartItem } from './CartItem'
+
 export const doGetAll = async (): Promise<[number, CartItem[]]> => {
 	const response = await fetch('/api/')
 	const data: [string, CartItem][] = await response.json()
 	const result: CartItem[] = []
-	const oids: number[] = []
 	data.forEach((pair) => {
-		oids.push(parseInt(pair[0]))
 		result.push(pair[1])
 	})
-	return [Math.max(-1, ...oids) + 1, result]
+	return [getNextOID(result), result]
+}
+
+export const getNextOID = (items: CartItem[]) => {
+	// find the max oid, and then generate the next oid available.
+	const oids = items.map((o) => o.oid)
+	return Math.max(-1, ...oids) + 1
 }
 
 export const doPostItem = async (item: CartItem) => {

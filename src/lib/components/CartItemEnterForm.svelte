@@ -6,10 +6,10 @@
 	export let name: string = ''
 	export let quantity: number = 0
 	export let price: number = 0
-	export let buttonText: string = 'Add Row'
+	export let buttonText: string = 'Add Item'
 	let priceTxt: string = price.toString()
 	let nameField: HTMLInputElement
-	$: price = parseFloat(priceTxt)
+	$: price = parseFloat(priceTxt) || 0
 </script>
 
 <form
@@ -34,7 +34,14 @@
 		value={buttonText}
 		type="submit"
 	/>
-	<br />
-	---------
-	<br />
 </form>
+<br />
+<br />
+
+<style>
+	form {
+		max-width: 20rem;
+		display: grid;
+		grid-template-columns: 5rem 1fr 1fr;
+	}
+</style>
